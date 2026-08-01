@@ -77,10 +77,12 @@ jobs:
           export BACKEND_IMAGE="ghcr.io/${{ steps.repo.outputs.repo }}/backend:${{ github.sha }}"
           export COSMOS_DB_URI="https://${{ vars.COSMOSDB_NAME }}.documents.azure.com:443/"
           export COSMOS_DB_ACCOUNT_NAME="${{ vars.COSMOSDB_NAME }}"
-          export COSMOS_DB_RESOURCE_GROUP="${{ vars.RESOURCEGROUP_NAME }}"
-          export COSMOS_DB_REGION="${{ vars.COSMOS_DB_REGION }}"
-          export AZURE_MANAGED_IDENTITY_CLIENT_ID="${{ steps.mi.outputs.client_id }}"
-          envsubst < .azure/container-app.tmpl.yaml > .azure/container-app.resolved.yaml
+           export COSMOS_DB_RESOURCE_GROUP="${{ vars.RESOURCEGROUP_NAME }}"
+           export COSMOS_DB_REGION="${{ vars.COSMOS_DB_REGION }}"
+           export AZURE_MANAGED_IDENTITY_CLIENT_ID="${{ steps.mi.outputs.client_id }}"
+           export AZURE_SUBSCRIPTION_ID="${{ vars.SUBSCRIPTION_ID }}"
+           export CURRENCY_API_BASE_URL=""
+           envsubst < .azure/container-app.tmpl.yaml > .azure/container-app.resolved.yaml
 
       - name: Ensure Container App registry auth
         run: |
