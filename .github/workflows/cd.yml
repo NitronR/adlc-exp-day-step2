@@ -86,12 +86,35 @@ jobs:
 
       - name: Ensure Container App registry auth
         run: |
-          az containerapp registry set \
-            --name "${{ vars.CONTAINERAPP_NAME }}" \
-            --resource-group "${{ vars.RESOURCEGROUP_NAME }}" \
-            --server ghcr.io \
-            --username "${{ github.actor }}" \
-            --password "${{ secrets.GHCR_PAT }}"
+          for attempt in 1 2 3; do
+            set +e
+            output=$(az containerapp registry set \
+              --name "${{ vars.CONTAINERAPP_NAME }}" \
+              --resource-group "${{ vars.RESOURCEGROUP_NAME }}" \
+              --server ghcr.io \
+              --username "${{ github.actor }}" \
+              --password "${{ secrets.GHCR_PAT }}" 2>&1)
+            status=$?
+            set -e
+
+            printf '%s\n' "$output"
+
+            if [ "$status" -eq 0 ]; then
+              break
+            fi
+
+            if [[ "$output" != *"(InternalServerError)"* ]]; then
+              exit "$status"
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              exit "$status"
+            fi
+
+            sleep_seconds=$((10 * (1 << (attempt - 1))))
+            printf 'Retrying az containerapp registry set after %ss due to Azure InternalServerError (attempt %s/3)\n' "$sleep_seconds" "$attempt"
+            sleep "$sleep_seconds"
+          done
 
       - name: Deploy to Azure Container App
         run: |
