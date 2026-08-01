@@ -13,6 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OuterloopLabApi\OuterloopLabApi\OuterloopLabApi.csproj" />
+    <ProjectReference Include="..\OuterloopLabApi\OuterloopLabApi.csproj" />
   </ItemGroup>
 </Project>

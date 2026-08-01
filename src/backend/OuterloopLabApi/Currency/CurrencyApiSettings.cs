@@ -2,9 +2,9 @@ using System;
 
 namespace OuterloopLabApi.Currency;
 
-public sealed record CurrencyApiSettings
+public sealed class CurrencyApiSettings
 {
-    public required string BaseUrl { get; init; }
+    public string BaseUrl { get; }
 
     public static CurrencyApiSettings FromEnvironment()
     {
@@ -13,8 +13,9 @@ public sealed record CurrencyApiSettings
             ? "https://frankfurter.dev"
             : value!;
 
-        return new CurrencyApiSettings { BaseUrl = baseUrl };
+        return new CurrencyApiSettings(baseUrl);
     }
+
 
     public CurrencyApiSettings(string baseUrl)
     {

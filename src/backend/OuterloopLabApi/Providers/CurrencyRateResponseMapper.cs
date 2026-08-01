@@ -3,7 +3,7 @@ using OuterloopLabApi.Exceptions;
 
 namespace OuterloopLabApi.Providers;
 
-internal static class CurrencyRateResponseMapper
+public static class CurrencyRateResponseMapper
 {
     public static RateQuote Map(JsonElement root, string requestedFrom, string requestedTo)
     {
